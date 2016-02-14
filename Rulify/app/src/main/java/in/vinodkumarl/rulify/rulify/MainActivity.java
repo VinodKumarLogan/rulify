@@ -3,48 +3,45 @@ package in.vinodkumarl.rulify.rulify;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
+
 public class MainActivity extends AppCompatActivity {
+    public static String blockedNumber = "";
+    public static boolean checkSMSSend = false;
+    public static String smsMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         final EditText number = (EditText) findViewById(R.id.phoneNumber);
         Button block = (Button) findViewById(R.id.blockButton);
         Button ublock = (Button) findViewById(R.id.unblockButton);
+        final CheckBox smsSend = (CheckBox) findViewById(R.id.smsCheck);
+        final EditText bmsg = (EditText) findViewById(R.id.blockMessage);
 
         block.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Long phone = Long.parseLong(number.getText().toString());
+                        final String phone = number.getText().toString();
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Block contact")
                                 .setMessage("Are you sure you want to block this contact?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        blockedNumber = phone;
+                                        checkSMSSend = smsSend.isChecked();
+                                        smsMessage = bmsg.getText().toString();
                                         //block calls from this contact
                                     }
                                 })
@@ -68,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                                 .setMessage("Are you sure you want to unblock this contact?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        blockedNumber = "";
                                         //unblock calls from this contact
                                     }
                                 })
